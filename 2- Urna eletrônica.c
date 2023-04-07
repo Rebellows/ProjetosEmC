@@ -35,10 +35,16 @@ int main () {
             printf("------\nErro, valor inserido não é válido.\n");
         }
     }
-    sumbn = branco + nulo;
-    pbranco = (float) branco / totv * 100;
-    pnulo = (float) nulo / totv * 100;
-    ptot = (float) sumbn / totv * 100;
+     if (totv == 0) {
+        pbranco = 0;
+        pnulo = 0;
+        ptot = 0;
+    } else {
+        sumbn = branco + nulo;
+        pbranco = (float) branco / totv * 100;
+        pnulo = (float) nulo / totv * 100;
+        ptot = (float) sumbn / totv * 100;
+    }
     
     printf("------\nVOTOS:\n Candidato 1: %d\n Candidato 2: %d\n Candidato 3: %d\n Votos em branco: %d\n Votos nulos: %d\n", candum, canddois, candtres, branco, nulo);
     printf("PORCENTAGEM:\n Votos em branco: %f%%\n Votos nulos: %f%%\n Brancos e nulos: %f%%\n", pbranco, pnulo, ptot);
