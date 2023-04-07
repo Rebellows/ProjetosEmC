@@ -44,4 +44,3 @@ int main () {
     printf("PORCENTAGEM:\n Votos em branco: %f%%\n Votos nulos: %f%%\n Brancos e nulos: %f%%\n", pbranco, pnulo, ptot);
     return 0;
 }
-
