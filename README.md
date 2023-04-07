@@ -1,1 +1,1 @@
-Meus projetos nessa jornada da vida
+Meus projetos em C nessa jornada da vida.
