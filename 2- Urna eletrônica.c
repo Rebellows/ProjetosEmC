@@ -46,7 +46,7 @@ int main () {
         ptot = (float) sumbn / totv * 100;
     }
     
-    printf("------\nVOTOS:\n Candidato 1: %d\n Candidato 2: %d\n Candidato 3: %d\n Votos em branco: %d\n Votos nulos: %d\n", candum, canddois, candtres, branco, nulo);
-    printf("PORCENTAGEM:\n Votos em branco: %f%%\n Votos nulos: %f%%\n Brancos e nulos: %f%%\n", pbranco, pnulo, ptot);
+    printf("------\nVOTOS:\nVotos totais: %d\nCandidato 1: %d\nCandidato 2: %d\nCandidato 3: %d\nVotos em branco: %d\nVotos nulos: %d\n", totv, candum, canddois, candtres, branco, nulo);
+    printf("PORCENTAGEM:\nVotos em branco: %f%%\nVotos nulos: %f%%\nBrancos e nulos: %f%%\n", pbranco, pnulo, ptot);
     return 0;
 }
