@@ -17,4 +17,3 @@ int main() {
     troca(&a, &b);
     printf("Valor a trocado = %d, valor b trocado = %d", a, b);
 }
-///////////
