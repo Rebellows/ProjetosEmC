@@ -14,7 +14,7 @@ int main() {
     printf("Olá %s, o que deseja fazer?\n [1] Calculadora\n [2] Benção\nDigite aqui: ", nome);
     scanf("%d", &valor);
     if (valor == 1) {
-        printf("Certo, você deseja usar a calculadora. Qual das opções deseja fazer?\n [1] Adição        | [7] Equação de segundo grau\n [2] Subtração     | [8]\n [3] Divisão       | [9]\n [4] Multiplicação | [10]\n [5] Potenciação   | [11]\n [6] Radiciação    | [12]\nDigite aqui: ");
+        printf("Certo, você deseja usar a calculadora. Qual das opções deseja fazer?\n [1] Adição        | [7] Equação de segundo grau\n [2] Subtração     | [8] Fatorial\n [3] Divisão       | [9]\n [4] Multiplicação | [10]\n [5] Potenciação   | [11]\n [6] Radiciação    | [12]\nDigite aqui: ");
         scanf("%d", &num);
         if (num == 4) {
             printf("Entendido, vamos multiplicar.\n");
@@ -125,6 +125,16 @@ int main() {
                 printf("A equação possui duas raízes distintas, sendo elas aproximadamente %.1f e %.1f", x1, x2);
                 return 0;
             }
+        }
+        if (num == 8) {
+            int fat, n;
+            printf("Calculadora de fatorial!\n");
+            printf("Insira um valor para o qual deseja calcular seu fatorial: ");
+            scanf("%d", &n);
+            for(fat = 1; n > 1; n = n - 1)
+            fat = fat * n;
+            printf("Fatorial calculado: %d", fat);
+            return 0;
         }
         else {
             printf("O valor digitado não é válido.");
