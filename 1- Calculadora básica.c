@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <math.h>
+#include <time.h>
 
 char nome[99];
 char c;
@@ -130,8 +131,29 @@ int main() {
         }
     }
     if (valor == 2) {
-        printf("%s, Deus te abençoe.", nome);
-        return 0;
+        printf("%s, Deus te abençoe.\n", nome);
+            srand(time(NULL));
+        int ale = rand() % 5;
+        if (ale == 0) {
+            printf("Josué 1:9\n'Não fui eu que ordenei a você? Seja forte e corajoso! Não se apavore nem desanime, pois o Senhor, o seu Deus, estará com você por onde você andar.'");
+            return 0;
+        }
+        if (ale == 1) {
+            printf("João 16:33\n'Eu disse essas coisas para que em mim vocês tenham paz. Neste mundo vocês terão aflições; contudo, tenham ânimo! Eu venci o mundo.'");
+            return 0;
+        }
+        if (ale == 2) {
+            printf("Romanos 8:28\n'Sabemos que Deus age em todas as coisas para o bem daqueles que o amam, dos que foram chamados de acordo com o seu propósito.'");
+            return 0;
+        }
+        if (ale == 3) {
+            printf("Êxodo 20:12\n'Honra teu pai e tua mãe, a fim de que tenhas vida longa na terra que o Senhor,o teu Deus, te dá.'");
+            return 0;
+        }
+        if (ale == 4) {
+            printf("Matheus 11:28\n'Venham a mim, todos os que estão cansados e sobrecarregados, e eu darei descanso a vocês.'");
+            return 0;
+        }
     }
     else if (valor != 1 && valor != 2) {
         printf("O valor digitado não é válido.");
