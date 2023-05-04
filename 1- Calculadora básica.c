@@ -145,23 +145,23 @@ int main() {
             srand(time(NULL));
         int ale = rand() % 5;
         if (ale == 0) {
-            printf("Josué 1:9\n'Não fui eu que ordenei a você? Seja forte e corajoso! Não se apavore nem desanime, pois o Senhor, o seu Deus, estará com você por onde você andar.'");
+            printf("'Não fui eu que ordenei a você? Seja forte e corajoso! Não se apavore nem desanime, pois o Senhor, o seu Deus, estará com você por onde você andar.'\n- Josué 1:9");
             return 0;
         }
         if (ale == 1) {
-            printf("João 16:33\n'Eu disse essas coisas para que em mim vocês tenham paz. Neste mundo vocês terão aflições; contudo, tenham ânimo! Eu venci o mundo.'");
+            printf("'Eu disse essas coisas para que em mim vocês tenham paz. Neste mundo vocês terão aflições; contudo, tenham ânimo! Eu venci o mundo.'\n- João 16:33");
             return 0;
         }
         if (ale == 2) {
-            printf("Romanos 8:28\n'Sabemos que Deus age em todas as coisas para o bem daqueles que o amam, dos que foram chamados de acordo com o seu propósito.'");
+            printf("'Sabemos que Deus age em todas as coisas para o bem daqueles que o amam, dos que foram chamados de acordo com o seu propósito.'\n- Romanos 8:28");
             return 0;
         }
         if (ale == 3) {
-            printf("Êxodo 20:12\n'Honra teu pai e tua mãe, a fim de que tenhas vida longa na terra que o Senhor,o teu Deus, te dá.'");
+            printf("'Honra teu pai e tua mãe, a fim de que tenhas vida longa na terra que o Senhor,o teu Deus, te dá.'\n- Êxodo 20:12");
             return 0;
         }
         if (ale == 4) {
-            printf("Matheus 11:28\n'Venham a mim, todos os que estão cansados e sobrecarregados, e eu darei descanso a vocês.'");
+            printf("'Venham a mim, todos os que estão cansados e sobrecarregados, e eu darei descanso a vocês.'\n- Matheus 11:28");
             return 0;
         }
     }
