@@ -13,7 +13,7 @@ int main() {
     printf("Olá %s, o que deseja fazer?\n [1] Calculadora\n [2] Benção\nDigite aqui: ", nome);
     scanf("%d", &valor);
     if (valor == 1) {
-        printf("Certo, você deseja usar a calculadora. Qual das opções deseja fazer?\n [1] Adição        | [7]\n [2] Subtração     | [8]\n [3] Divisão       | [9]\n [4] Multiplicação | [10]\n [5] Potenciação   | [11]\n [6] Radiciação    | [12]\nDigite aqui: ");
+        printf("Certo, você deseja usar a calculadora. Qual das opções deseja fazer?\n [1] Adição        | [7] Equação de segundo grau\n [2] Subtração     | [8]\n [3] Divisão       | [9]\n [4] Multiplicação | [10]\n [5] Potenciação   | [11]\n [6] Radiciação    | [12]\nDigite aqui: ");
         scanf("%d", &num);
         if (num == 4) {
             printf("Entendido, vamos multiplicar.\n");
@@ -88,7 +88,7 @@ int main() {
             scanf("%f", &b);
             c = pow(a, b);
             printf("O resultado de %.1f^%.1f é aproximadamente: %.1f", a, b, c);
-            }
+        }
         if (num == 6) {
             float b, i, r;
             printf("Certo, vamos calcular raízes!\n");
@@ -99,16 +99,41 @@ int main() {
             r = pow(b, 1/i);
             printf("O valor de %.1f em uma raíz de índice %.1f é aproximadamente: %.1f", b, i, r);
             return 0;
+        }
+        if (num == 7) {
+            float a, b, c, d, x1, x2;
+            printf("Calculadora de equações do segundo grau!\n");
+            printf("Valor de a: ");
+            scanf("%f", &a);
+            printf("Valor de b: ");
+            scanf("%f", &b);
+            printf("Valor de c: ");
+            scanf("%f", &c);
+            d = (pow(b, 2)-4*a*c);
+            x1 = (-b+sqrt(d))/(2*a);
+            x2 = (-b-sqrt(d))/(2*a);
+            if (d < 0) {
+                printf("A equação não possui raízes reais.");
+                return 0;
             }
-        else {
-            printf("O valor digitado não é válido.");
+            if (d == 0) {
+                printf("A equação possui duas raízes de mesmo valor, sendo ele aproximadamente %.1f", x1);
+                return 0;
+            }
+            if (d > 0) {
+                printf("A equação possui duas raízes distintas, sendo elas aproximadamente %.1f e %.1f", x1, x2);
+                return 0;
             }
         }
+        else {
+            printf("O valor digitado não é válido.");
+        }
+    }
     if (valor == 2) {
         printf("%s, Deus te abençoe.", nome);
         return 0;
-        }
+    }
     else if (valor != 1 && valor != 2) {
         printf("O valor digitado não é válido.");
-        }
     }
+}
