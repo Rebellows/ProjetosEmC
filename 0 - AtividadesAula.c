@@ -1,3 +1,4 @@
+///// troca variaveis de lugar
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -17,7 +18,7 @@ int main() {
     troca(&a, &b);
     printf("Valor a trocado = %d, valor b trocado = %d", a, b);
 }
-/////
+///// faz algo se o número for par ou impar
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -41,7 +42,7 @@ int main() {
     }
     return 0;
 }
-/////
+///// calcula o horário com base em minutos
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -57,4 +58,24 @@ int main() {
     scanf("%d", &minutos);
     a = hm(minutos, &h, &m);
     printf("%dh%dm", h, m);
+}
+///// repete uma letra n vezes
+#include <stdio.h> 
+#include <stdlib.h>
+
+int aux(char s, int n) {
+    int contador;
+    for (contador = 1; contador <= n; contador++) {
+        printf("%c", s);
+    }
+}
+int main() {
+    int n;
+    char s;
+    printf("Digite uma letra: ");
+    scanf(" %c", &s);
+    printf("Valor da repetição: ");
+    scanf("%d", &n);
+    aux(s, n);
+    return 0;
 }
