@@ -14,7 +14,7 @@ int main() {
     printf("Olá %s, o que deseja fazer?\n [1] Calculadora\n [2] Benção\nDigite aqui: ", nome);
     scanf("%d", &valor);
     if (valor == 1) {
-        printf("Certo, você deseja usar a calculadora. Qual das opções deseja fazer?\n [1] Adição        | [7] Equação de segundo grau\n [2] Subtração     | [8] Fatorial\n [3] Divisão       | [9]\n [4] Multiplicação | [10]\n [5] Potenciação   | [11]\n [6] Radiciação    | [12]\nDigite aqui: ");
+        printf("Certo, você deseja usar a calculadora. Qual das opções deseja fazer?\n [1] Adição        | [7] Equação de segundo grau\n [2] Subtração     | [8] Fatorial\n [3] Divisão       | [9] Geometria plana\n [4] Multiplicação | [10]\n [5] Potenciação   | [11]\n [6] Radiciação    | [12]\nDigite aqui: ");
         scanf("%d", &num);
         if (num == 4) {
             printf("Entendido, vamos multiplicar.\n");
@@ -135,6 +135,84 @@ int main() {
             fat = fat * n;
             printf("Fatorial calculado: %d", fat);
             return 0;
+        }
+        if (num == 9) {
+            float e, l, a, p, b, h, dg, dp, d, bg, bp, pi, la, c, r;
+            printf("Geometria plana, então.\n");
+            printf("Escolha a forma:\n [1] Quadrado\n [2] Retângulo\n [3] Losango\n [4] Triângulo\n [5] Trapézio\n [6] Círculo\nDigite aqui: ");
+            scanf("%f", &e);
+            if (e == 1) {
+                printf("Certo, quadrados.\n");
+                printf("Valor do lado: ");
+                scanf("%f", &l);
+                a = l * l;
+                p = l * 4;
+                printf("A área do quadrado é %.1f e o perímetro é %.1f.", a, p);
+                return 0;
+            }
+            if (e == 2) {
+                printf("Certo, retângulos.\n");
+                printf("Valor da base: ");
+                scanf("%f", &b);
+                printf("Valor da altura: ");
+                scanf("%f", &h);
+                a = b * h;
+                p = (b + h) * 2;
+                printf("A área do retângulo é %.1f e o perímetro é %.1f.", a, p);
+                return 0;
+            }
+            if (e == 3) {
+                printf("Certo, losangos.\n");
+                printf("Valor da diagonal maior: ");
+                scanf("%f", &dg);
+                printf("Valor da diagonal menor: ");
+                scanf("%f", &dp);
+                printf("Valor do lado: ");
+                scanf("%f", &l);
+                a = (dg * dp) / 2;
+                p = l * 4;
+                printf("A área do losango é %.1f e o perímetro é %.1f.", a, p);
+                return 0;
+            }
+            if (e == 4) {
+                printf("Certo, triângulos.\n");
+                printf("Valor da base: ");
+                scanf("%f", &b);
+                printf("Valor da altura: ");
+                scanf("%f", &h);
+                a = (b * h) / 2;
+                printf("A área do triângulo é %.1f e o perímetro é a soma dos três lados.", a);
+                return 0;
+            }
+            if (e == 5) {
+                printf("Certo, trapézios.\n");
+                printf("Valor da base maior: ");
+                scanf("%f", &bg);
+                printf("Valor da base menor: ");
+                scanf("%f", &bp);
+                printf("Valor da altura: ");
+                scanf("%f", &h);
+                a = (bg + bp) * h / 2;
+                pi = bg - bp;
+                la = sqrt(pi * pi + h * h);
+                p = la * 2 + bg + bp;
+                printf("A área do trapézio é %.1f e o perímetro é %.1f.", a, p);
+                return 0;
+            }
+            if (e == 6) {
+                printf("Certo, círculos.\n");
+                printf("Valor do diâmetro: ");
+                scanf("%f", &d);
+                r = d / 2;
+                c = 2 * 3.14 * r;
+                a = 3.14 * (r * r);
+                printf("A área do círculo é %.1f e a circunferência é %.1f.", a, c);
+                return 0;
+            }
+            else {
+                printf("Valor digitado é inválido.");
+                return 0;
+            }
         }
         else {
             printf("O valor digitado não é válido.");
