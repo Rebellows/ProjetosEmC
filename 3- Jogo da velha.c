@@ -1,3 +1,4 @@
+// Integrantes: Gabriel Rebello, Natan Aragão e Francisco Porporatti
 #include <stdio.h>
 #define N 3 
 
