@@ -200,7 +200,7 @@ int main() {
     scanf("%d", &lado_tres);
     a = valor(lado_um, lado_dois, lado_tres);
     if (a == 0) {
-        printf("Essa porra não é um triângulo.");
+        printf("Isso não é um triângulo.");
         return 0;
     }
     else {
