@@ -270,3 +270,135 @@ int main() {
     quantidade_vogais(str);
     return 0;
 }
+///// verifica se a palavra recebida é palindromo
+#include <stdio.h>
+#include <string.h>
+#define MAX 100
+int palindromo(char *palavra);
+
+int palindromo(char *palavra) {
+    char invpalavra[MAX];
+    int i, j;
+    for (i = strlen (palavra) - 1, j = 0; i >= 0; i--, j++) {
+      invpalavra[j] = palavra[i];
+    }
+    invpalavra[j] = '\0';
+    if (strcmp(palavra, invpalavra) == 0){
+      return 1;
+    }
+    else {
+      return 0;
+    }
+    
+}
+int main() {
+    char palavra[MAX+1];
+    fgets(palavra, MAX, stdin);
+    int tam = 0;
+    while ( palavra[tam] != '\0' ) ++tam;
+    if ( tam > 0 && palavra[tam-1] == '\n' ) --tam;
+    palavra[tam] = '\0';
+    if ( palindromo(palavra) == 1) printf("PALINDROMO\n");
+    else printf("-\n");
+    return 0;
+}
+///// conta a quantidade de casas com peao ou dama dos dois jogadores
+#include <stdio.h>
+#define CASAS 64
+
+struct casa {
+    int cor;
+    int jogador;
+    char peca;
+};
+
+int conta_casas(struct casa *tab, int num_casas, int jogador, char peca);
+
+int conta_casas(struct casa *tab, int num_casas, int jogador, char peca) {
+    int contador = 0;
+    for (int i = 0; i < num_casas; i++) {
+        if (tab[i].jogador == jogador && tab[i].peca == peca) {
+                contador++;
+        }
+    }
+    return contador;
+}
+
+int main() {
+    int i;
+    struct casa damas[CASAS];
+    for (i=0; i<CASAS; ++i)
+        scanf("%d %d %c", &(damas[i].cor), &(damas[i].jogador), &(damas[i].peca) );
+    int p1 = conta_casas((struct casa *)damas,CASAS,1,'P');
+    int d1 = conta_casas((struct casa *)damas,CASAS,1,'D');
+    int p2 = conta_casas((struct casa *)damas,CASAS,2,'P');
+    int d2 = conta_casas((struct casa *)damas,CASAS,2,'D');
+    printf("%d %d %d %d\n", p1, d1, p2, d2);
+    return 0;
+}
+///// cria um triangulo indo de 1 até o numero recebido
+#include <stdio.h>
+
+int piramide(int n){
+    if (n >= 0) {
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= i; j++) {
+                printf("%d ", i);
+            }
+            printf("\n");
+        }
+    }
+    else {
+        return 0;
+    }
+}
+int main() {
+    int n;
+    scanf("%d", &n);
+    piramide(n);
+}
+///// diz a qual seculo o ano recebido pertence
+#include <stdio.h>
+
+int seculo(int ano) {
+    if (ano > 0) {
+        int sec;
+        sec = ano / 100;
+        if (ano % 100 == 0) {
+            printf("%d", sec);
+        }
+        else {
+            printf("%d", sec+1);
+        }
+    }
+    else {
+        return 0;
+    }
+}
+
+int main() {
+    int ano;
+    scanf("%d", &ano);
+    seculo(ano);
+}
+///// recebe 30 numeros e verifica se a soma de dois proximos resulta no seguinte
+#include <stdio.h>
+#define n 30
+
+int reverso(int vetor[n]) {
+    int cont = 0;
+    for (int i = 0; i < n - 2; i++) {
+        if (vetor[i] + vetor[i+1] == vetor[i+2]) {
+            cont++;
+        }
+    }
+    printf("%d", cont);
+}
+
+int main() {
+    int vetor[n];
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &vetor[i]);
+    }
+    reverso(vetor);
+}
