@@ -1,0 +1,17 @@
+#/workspaces/linuxdistro/buildroot-2024.05.2/custom-scripts                                                                                                   
+#!/bin/sh
+case "$1" in
+    start)
+        /usr/bin/hello & 
+        /usr/bin/server &
+        /usr/bin/osInfo
+        ;;
+    stop)
+        exit 1
+        ;;
+    *)
+        exit 1
+        ;;
+esac
+exit 0
+
