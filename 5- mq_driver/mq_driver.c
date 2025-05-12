@@ -6,6 +6,7 @@
 #include <linux/uaccess.h>
 #include <linux/list.h>
 #include <linux/slab.h>
+#include <linux/string.h>
 
 #define DEVICE_NAME "mq"
 #define CLASS_NAME  "mq_class"
@@ -42,7 +43,7 @@ struct process_s {
 	pid_t pid;
 	struct list_head messages; // eh uma lista mas vai ser a fila de mensagens ja que nao tem queue_head
 	int msg_count;
-}
+};
 
 struct list_head process_list;
 int process_count = 0;
@@ -109,6 +110,13 @@ int register_process(char *name, pid_t pid) {
 		return 1;
 	}
 
+	entry->name = kmalloc(strlen(name) + 1, GFP_KERNEL);
+	if (!entry->name) {
+		printk(KERN_INFO "MQ Driver: Failed to allocate memory for name.\n");
+		kfree(entry);
+    return 1;
+	}
+
 	strcpy(entry->name, name);
 	entry->pid = pid;
 	entry->msg_count = 0;
@@ -123,7 +131,7 @@ int register_process(char *name, pid_t pid) {
 
 int remove_process(char *name, pid_t pid) {
 	struct process_s *entry = NULL;
-	strut message_s *msg = NULL, *tmp = NULL;
+	struct message_s *msg = NULL, *tmp = NULL;
 	
 	entry = find_process_by_pid(pid);
 	
@@ -132,7 +140,7 @@ int remove_process(char *name, pid_t pid) {
 		return 1;
 	}
 
-	list_for_each_entry(msg, tmp, &entry->messages, link) {
+	list_for_each_entry_safe(msg, tmp, &entry->messages, link) {
 		list_del(&msg->link);
 		kfree(msg->message);
 		kfree(msg);
@@ -143,7 +151,7 @@ int remove_process(char *name, pid_t pid) {
 	kfree(entry);
 	process_count--;
 	
-	printk(KERN_INFO "MQ Driver: Process %s with pid %d removed.\n", name, pid);
+	printk(KERN_INFO "MQ Driver: Process %s with pid %d removed.\n", entry->name, pid);
 
 	return 0;
 }
@@ -171,7 +179,7 @@ int send_message(char *name, char *message, int message_size) {
 		return 1;
 	}
 
-	msg->message = kmalloc(message_size, GFP_KERNEL);
+	msg->message = kmalloc(message_size + 1, GFP_KERNEL);
 	
 	if (!msg->message) {
 		printk(KERN_INFO "MQ Driver: Memory allocation failed, this should never fail due to GFP_KERNEL flag\n");
@@ -179,8 +187,8 @@ int send_message(char *name, char *message, int message_size) {
 		return 1;
 	}
 
-	strcpy(msg->message, message);
-	msg->message[message_size] = '\0';
+	strncpy(msg->message, message, message_size);
+	msg->message[message_size] = '\0'; 
 	msg->size = message_size;
 	
 	if (entry->msg_count >= max_messages) {
@@ -240,8 +248,6 @@ struct message_s *read_message(pid_t pid) {
 	return msg;
 }
 
-// pra baixo eh codigo do sor
-
 static int mq_init(void)
 {
 	printk(KERN_INFO "MQ Driver: Initializing the LKM\n");
@@ -273,7 +279,7 @@ static int mq_init(void)
 	
 	printk(KERN_INFO "MQ Driver: device class created.\n");
 	
-	INIT_LIST_HEAD(&list);
+	INIT_LIST_HEAD(&process_list);
 		
 	return 0;
 }
@@ -315,49 +321,115 @@ static int dev_release(struct inode *inodep, struct file *filep) {
 	return 0;
 }
 
-// falta atualizar esses dois do codigo do sor
+static int dev_read(struct file *filep, char *buffer, size_t len, loff_t *offset) {
+	struct message_s *msg;
+    int error_count;
+    char *msg_buffer;
+    int msg_len;
+    pid_t pid = task_pid_nr(current);
+    
+    if (*offset > 0) {
+        return 0;
+    }
+    
+    msg = read_message(pid);
+    if (!msg) {
+        return 0; 
+    }
+    
+	msg_len = msg->size + 4;
+	msg_buffer = kmalloc(msg_len, GFP_KERNEL);
+	if (!msg_buffer) {
+		printk(KERN_INFO "MQ Driver: failed to allocate memory for message in buffer\n");
+		kfree(msg->message);
+		kfree(msg);
+		return 1;
+	}
 
-static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *offset)
-{
-	int error = 0;
-	struct message_s *entry = list_first_entry(&list, struct message_s, link);
-   
-	if (list_empty(&list)) {
-		printk(KERN_INFO "Simple Driver: no data.\n");
-		
-		return 0;
-	}	
+	sprintf(msg_buffer, "%s\n", msg->message); 
+
+	error_count = copy_to_user(buffer, msg_buffer, msg_len);
+
+	kfree(msg_buffer);
+	kfree(msg->message);
+	kfree(msg);
+
+	if (error_count == 0) {
+		*offset = msg_len;
+		return msg_len;
+	} 
 	
-	// copy_to_user has the format ( * to, *from, size) and returns 0 on success
-	error = copy_to_user(buffer, entry->message, entry->size);
-
-	if (!error) {				// if true then have success
-		printk(KERN_INFO "Simple Driver: sent %d characters to the user\n", entry->size);
-		list_delete_head();
-		
-		return 0;
-	} else {
-		printk(KERN_INFO "Simple Driver: failed to send %d characters to the user\n", error);
-		
-		return -EFAULT;			// Failed -- return a bad address message (i.e. -14)
-	}
+	printk(KERN_INFO "MQ Driver: Failed to send message to user\n");
+	return 1;
 }
 
-static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset)
-{
-	if (len < MSG_SIZE) {
-		list_add_entry(buffer);
-		list_show();
+static int dev_write(struct file *filep, const char *buffer, size_t len, loff_t *offset) {
+    char *kmsg;
+    char *cmd, *arg;
+    pid_t pid = task_pid_nr(current);
+    ssize_t result;
 
-		printk(KERN_INFO "Simple Driver: received %zu characters from the user\n", len);
-		
+    kmsg = kmalloc(len + 1, GFP_KERNEL);
+    if (!kmsg) {
+        printk(KERN_INFO "MQ Driver: Failed to allocate memory for message\n");
+        return 1;
+    }
+
+    if (copy_from_user(kmsg, buffer, len)) {
+        printk(KERN_INFO "MQ Driver: Failed to copy message from user space\n");
+        kfree(kmsg);
+        return 1;
+    }
+
+    kmsg[len] = '\0'; 
+
+    if (kmsg[0] != '/') {
+        printk(KERN_INFO "MQ Driver: Message must start with '/'\n");
+        kfree(kmsg);
+        return 1;
+    }
+
+    cmd = kmsg + 1;
+
+    arg = strchr(cmd, ' ');
+    if (!arg) {
+        printk(KERN_INFO "MQ Driver: Invalid command format (missing argument)\n");
+        kfree(kmsg);
+        return 1;
+    }
+
+    *arg = '\0';
+    arg++; 
+
+    if (strcmp(cmd, "reg") == 0) {
+        result = register_process(arg, pid);
+    }
+    else if (strcmp(cmd, "unreg") == 0) {
+        result = unregister_process(arg, pid);
+    }
+    else {
+        struct process_queue *receiver = find_process_by_pid(pid);
+        if (!receiver) {
+            printk(KERN_INFO "MQ Driver: Unregistered process\n");
+            kfree(kmsg);
+            return 1;
+        }
+
+        if (strcmp(cmd, "[all]") == 0) {
+            result = broadcast_message(arg, strlen(arg));
+        } 
+		else {
+            result = send_message(receiver->name, arg, strlen(arg));
+        }
+    }
+
+    kfree(kmsg);
+	if (result == 0) {
 		return len;
-	} else {
-		printk(KERN_INFO "Simple Driver: too many characters to deal with (%d)\n", len);
-		
-		return 0;
-	}
-}
+	} 
+
+	return 1;
+} 
 
 module_init(mq_init);
 module_exit(mq_exit);
